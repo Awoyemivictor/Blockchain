@@ -1,0 +1,35 @@
+To create wallet			solana-keygen new --outfile ~/my-keypair.json
+
+To check pubkey-			solana-keygen pubkey ~/my-keypair.json	or	solana address
+
+To verify keypair-			solana-keygen verify (Pubkey/address) ~/my-keypair.json
+
+To enter Devnet-			solana config set --url https://api.devnet.solana.com --keypair ~/my-keypair.json
+
+To enter Mainnet-		solana config set --url https://api.mainnet-beta.solana.com --keypair
+
+To confirm Devnet-		solana config get	
+
+To airdrop Solana-		solana airdrop 2
+
+To check Solana Balance- 		solana balance
+
+To create token-			spl-token create-token	{Then get token address}
+ 
+To create account-		spl-token create-account (token address)
+
+To mint token-			spl-token mint (token address) (Number of tokens)
+ 
+To check accounts-		spl-token accounts
+
+To get address-			spl-token address
+
+To transfer-			spl-token transfer (Token address) 50 Person’s address
+
+
+
+				spl-token transfer --fund-recipient (Token address) 50 Person’s 				address --allow-unfunded-recipient
+
+
+To disable future minting-		spl-token authorize {token address} mint --disable
+
