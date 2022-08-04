@@ -1,0 +1,15 @@
+"root":{8 items
+"key":int4
+"updateAuthority":string"A2JRpsGvcrY28hQtQNzSieRvSZ2wSobyYaEgudCfxpHX"
+"mint":string"8Mig7bd5g1dKrNsrFVMvh3t3srD2sLKfASkypYRpashx"
+"data":{4 items
+"name":string"Thee Token"
+"symbol":string"Thee"
+"uri":string"https://arweave.net/6ow7lfZq4rJACGDAZypD3VWD4ycVlqSUOyfQWrvgkI0"
+"sellerFeeBasisPoints":int0
+}
+"primarySaleHappened":int0
+"isMutable":int1
+"editionNonce":int255
+"tokenStandard":int2
+}
