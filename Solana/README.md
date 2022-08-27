@@ -198,8 +198,8 @@ ts-node first.ts
 
 # NOW, PROBABLY YOU WANT TO UPDATE YOUR TOKEN INFORMATION
 
-1. Create a second.ts file in VS code
-2. Copy and paste this line of code below
+- Create a second.ts file in VS code
+- Copy and paste this line of code below
 
 ```jsx
 import * as mpl from "@metaplex-foundation/mpl-token-metadata";
