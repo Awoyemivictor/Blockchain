@@ -97,23 +97,84 @@ spl-token mint (token address) (Number of tokens)
 
 You can update your Node.js with this command line: npm install latest-version OR npm install -g npm@latest
 
-1. Go to Line 18 in the code and change to your **main wallet** address
+```jsx
+import * as mpl from "@metaplex-foundation/mpl-token-metadata";
+import * as web3 from "@solana/web3.js"
+import * as anchor from '@project-serum/anchor'
+
+export function loadWalletKey(keypairFile: string): web3.Keypair {
+    const fs = require("fs");
+    const loaded = web3.Keypair.fromSecretKey(
+        new Uint8Array(JSON.parse(fs.readFileSync(keypairFile).toString())),
+    );
+    return loaded;
+}
+
+async function main() {
+    console.log("Let's name some tokens");
+
+    const myKeypair = loadWalletKey("BEDM9mz8Rne3yP3UDpqjixmxUhMLRJWzh5S2YYnixTTX.json")
+    console.log(myKeypair.publicKey.toBase58())
+    const mint = new web3.PublicKey("XYZxvq4uFxyhi9La3Ba63fpmkbkeCYaWVyN2vzVDSRc")
+
+    const seed1 = Buffer.from(anchor.utils.bytes.utf8.encode("metadata"));
+    const seed2 = Buffer.from(mpl.PROGRAM_ID.toBytes());
+    const seed3 = Buffer.from(mint.toBytes());
+
+    const [metadataPDA, _bump] = web3.PublicKey.findProgramAddressSync([seed1, seed2, seed3], mpl.PROGRAM_ID);
+
+    const accounts = {
+        metadata: metadataPDA,
+        mint,
+        mintAuthority: myKeypair.publicKey,
+        payer: myKeypair.publicKey,
+        updateAuthority: myKeypair.publicKey,
+    }
+
+    const dataV2 = {
+        name: "Gizmo Coin",
+        symbol: "$GIZMO",
+        uri: "https://uxm26fljyvkiy7m45ll3iehqk6jzthykw3eiqasnnmpmbhpbli.arweave.net/pdmvFWnFVIx9nOrXtB-DwV5OZnwq2yIgCTWsewJ3hWs",
+        // we don't need that
+        sellerFeeBasisPoints: 0,
+        creators: null,
+        collection: null,
+        uses: null
+    }
+
+    const args = {
+        createMetadataAccountArgsV2: {
+            data: dataV2,
+            isMutable: true
+        }
+    };
+
+    const ix = mpl.createCreateMetadataAccountV2Instruction(accounts, args);
+    const tx = new web3.Transaction();
+    tx.add(ix);
+    const connection = new web3.Connection("https://api.devnet.solana.com");
+    const txid = await web3.sendAndConfirmTransaction(connection, tx, [myKeypair]);
+    console.log(txid);
+
+}
+
+main()
+```
+
+- Go to Line 18 in the code and change to your **main wallet** address
 
 ```jsx
 const myKeypair = loadWalletKey("vicZqzb2mXjN5x68kgePx9Gh8sF9wQ3x8UnGAxJfid9.json")
 ```
 
-1. Go to Line 20 in the code and change it to your **token address** without the .json
+- Go to Line 20 in the code and change it to your **token address** without the .json
 
-![Screenshot 2022-07-19 at 11.00.43 AM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/02aded32-cabb-4031-b028-e90687e4645a/Screenshot_2022-07-19_at_11.00.43_AM.png)
+- Go to Line 40 in the code and Change to your Token Name, Token Symbol
+- Go to Line 60 and change to Devnet or Mainnet
 
-1. Go to Line 40 in the code and Change to your Token Name, Token Symbol
-2. Go to Line 60 and change to Devnet or Mainnet
 
-![Screenshot 2022-07-19 at 11.02.56 AM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/55e368c0-b319-4c1f-b09c-6c5640770e40/Screenshot_2022-07-19_at_11.02.56_AM.png)
-
-1. Now, we need to generate the URI. Go to your **pinata account** and upload your image first. 
-2. Create a new file in VS code and call it **metadata.json**. Paste the code below inside the metadata.json file. 
+- Now, we need to generate the URI. Go to your **pinata account** and upload your image first. 
+- Create a new file in VS code and call it **metadata.json**. Paste the code below inside the metadata.json file. 
 
 ```jsx
 {
@@ -124,16 +185,16 @@ const myKeypair = loadWalletKey("vicZqzb2mXjN5x68kgePx9Gh8sF9wQ3x8UnGAxJfid9.jso
   }
 ```
 
-1. Update your token name, symbol, and description, and change the image to the token logo URL generated from pinata
-2. Now, upload the **metadata.json** file to Pinata Cloud
-3. Copy your URI and paste it into Line 42 in the **first.ts** file (which is our original file)
-4. Now, Run this command
+- Update your token name, symbol, and description, and change the image to the token logo URL generated from pinata
+- Now, upload the **metadata.json** file to Pinata Cloud
+- Copy your URI and paste it into Line 42 in the **first.ts** file (which is our original file)
+- Now, Run this command
 
 ```jsx
 ts-node first.ts
 ```
 
-1. **CONGRATULATIONS!!!** Our Token Is Successfully Registered Now 😍😍😍 Check and confirm it on Solana Explorer.
+- **CONGRATULATIONS!!!** Our Token Is Successfully Registered Now 😍😍😍 Check and confirm it on Solana Explorer.
 
 # NOW, PROBABLY YOU WANT TO UPDATE YOUR TOKEN INFORMATION
 
@@ -220,14 +281,14 @@ async function main() {
 main()
 ```
 
-1. Update the Info like the first step (Name, Symbol & metadata URI)
-2. Run this command in terminal
+- Update the Info like the first step (Name, Symbol & metadata URI)
+- Run this command in terminal
 
 ```jsx
 ts-node second.ts
 ```
 
-1. Check Solana Explorer. Your token info will be automatically updated.
+- Check Solana Explorer. Your token info will be automatically updated.
 
 # SOME QUESTIONS YOU MIGHT HAVE
 
